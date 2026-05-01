@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation de Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .info-message {
+            background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%);
+            border: 2px solid #2ed573;
+            color: #0a3d62;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .code-input-section {
+            margin-bottom: 25px;
+        }
+        .code-input-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        #codeInput {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+        #codeInput:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        #codeInput.error {
+            border-color: #ff4757;
+            animation: shake 0.5s;
+        }
+        #codeInput.success {
+            border-color: #2ed573;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-validate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-validate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .btn-clear {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-clear:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message.show {
+            display: block;
+        }
+        .message-error {
+            background: #ffeaa7;
+            border: 2px solid #fdcb6e;
+            color: #d63031;
+        }
+        .message-success {
+            background: #dfe6e9;
+            border: 2px solid #74b9ff;
+            color: #0984e3;
+        }
+        .message-success-admin {
+            background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%);
+            border: 2px solid #2ed573;
+            color: #0a3d62;
+            font-weight: bold;
+        }
+        .admin-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .admin-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #1877f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid #1877f2;
+        }
+        .admin-link:hover {
+            background: #1558b0;
+            border-color: #1558b0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.3);
+        }
+        .facebook-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Validation de Code</h1>
+            <p>Entrez votre code pour continuer</p>
+        </div>
+        <div class="info-message">
+            💡 Cliquez sur "Contacter l'administrateur" pour recevoir un code 💡
+        </div>
+        <div class="code-input-section">
+            <label for="codeInput">Code d'accès</label>
+            <input 
+                type="text" 
+                id="codeInput" 
+                placeholder="Entrez votre code ici..." 
+                maxlength="10"
+                autocomplete="off"
+            >
+        </div>
+        <div class="button-group">
+            <button class="btn btn-validate" onclick="validerCode()">✅ Valider</button>
+            <button class="btn btn-clear" onclick="effacerCode()">🗑️ Effacer</button>
+        </div>
+        <div id="message" class="message"></div>
+        <div class="admin-section">
+            <a href="https://www.facebook.com/share/p/1Dp7BDnvSj/" target="_blank" class="admin-link">
+                <span class="facebook-icon">📘</span> Contacter l'administrateur
+            </a>
+        </div>
+    </div>
+
+    <!-- Chargement des codes à usage unique -->
+    <script src="codes.js"></script>
+    <script>
+        // Codes admin permanents (utilisables sans limite)
+        const CODES_ADMIN = [
+            "XKQJMNPVR",
+            "BHZTWFLCD",
+            "GYAUESNQM",
+            "DPROVWKXI",
+            "CTHFZLJEY"
+        ];
+
+        // Initialisation à partir du fichier codes.js
+        let codesUsageUnique = new Set(CODES_USAGE_UNIQUE);
+        let codesUtilises = new Set();
+
+        function validerCode() {
+            const codeInput = document.getElementById('codeInput');
+            const messageDiv = document.getElementById('message');
+            const code = codeInput.value.trim();
+
+            codeInput.classList.remove('error', 'success');
+
+            if (!code) {
+                afficherMessage('Veuillez entrer un code', 'error');
+                codeInput.classList.add('error');
+                return;
+            }
+
+            // Vérifier si c'est un code admin (réutilisable)
+            if (CODES_ADMIN.includes(code)) {
+                afficherMessage('✅ Code ADMIN permanent - Accès autorisé !', 'success-admin');
+                codeInput.classList.add('success');
+                celebrerSucces();
+                setTimeout(() => {
+                    window.location.href = 'affiche final modifier.html';
+                }, 1000);
+                return;
+            }
+
+            // Vérifier si le code existe dans la liste à usage unique
+            if (codesUsageUnique.has(code)) {
+                if (!codesUtilises.has(code)) {
+                    codesUtilises.add(code);
+                    codesUsageUnique.delete(code);
+                    afficherMessage('✅ Code valide - Accès autorisé !', 'success');
+                    codeInput.classList.add('success');
+                    celebrerSucces();
+                    setTimeout(() => {
+                        window.location.href = 'affiche final modifier.html';
+                    }, 1000);
+                } else {
+                    afficherMessage('❌ Ce code a déjà été utilisé', 'error');
+                    codeInput.classList.add('error');
+                }
+            } else {
+                afficherMessage('❌ Code invalide ou inexistant', 'error');
+                codeInput.classList.add('error');
+            }
+        }
+
+        function effacerCode() {
+            const codeInput = document.getElementById('codeInput');
+            const messageDiv = document.getElementById('message');
+            codeInput.value = '';
+            codeInput.classList.remove('error', 'success');
+            messageDiv.classList.remove('show', 'message-error', 'message-success', 'message-success-admin');
+            messageDiv.style.display = 'none';
+        }
+
+        function afficherMessage(texte, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = texte;
+            messageDiv.className = 'message';
+            switch(type) {
+                case 'error': messageDiv.classList.add('message-error'); break;
+                case 'success': messageDiv.classList.add('message-success'); break;
+                case 'success-admin': messageDiv.classList.add('message-success-admin'); break;
+            }
+            messageDiv.classList.add('show');
+        }
+
+        function celebrerSucces() {
+            const container = document.querySelector('.container');
+            container.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                container.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') validerCode();
+        });
+    </script>
+</body>
+</html>

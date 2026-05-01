@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sorona · Boodji Prod | Drame</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #141414 0%, #1a1a2e 100%);
+      font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .movie-card {
+      max-width: 580px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2rem;
+      overflow: hidden;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .movie-card:hover {
+      transform: scale(1.01);
+    }
+
+    .hero-image {
+      width: 100%;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-content {
+      padding: 1.8rem 2rem 2.2rem;
+    }
+
+    .title-section {
+      margin-bottom: 1rem;
+    }
+
+    .movie-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, #0b0b1f, #2c2c4a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+
+    .director {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #5b5b6e;
+      margin-top: 0.3rem;
+      border-left: 3px solid #e6b422;
+      padding-left: 0.7rem;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 1rem 0 0.8rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 0.25rem;
+      font-size: 1.45rem;
+      letter-spacing: 2px;
+    }
+
+    .star-filled {
+      color: #f5b642;
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .star-empty {
+      color: #d4d4dc;
+    }
+
+    .review-count {
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #f0f0f5;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      color: #2c2c3a;
+    }
+
+    .meta-badge {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0.9rem 0 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-item {
+      background: #f2f2f6;
+      padding: 0.3rem 0.9rem;
+      border-radius: 30px;
+      color: #1f1f2e;
+      letter-spacing: 0.3px;
+    }
+
+    .age-rating {
+      background: #1e1e2f;
+      color: white;
+    }
+
+    .synopsis {
+      background: #fafafd;
+      padding: 1.1rem 1.2rem;
+      border-radius: 1.2rem;
+      margin: 1rem 0 1.3rem;
+      font-size: 0.94rem;
+      line-height: 1.45;
+      color: #2d2d3a;
+      border: 1px solid #eeeef2;
+      font-weight: 450;
+    }
+
+    .actors {
+      font-size: 0.88rem;
+      margin: 0.8rem 0 1.4rem;
+      color: #4b4b60;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+
+    .actors-label {
+      font-weight: 700;
+      color: #0b0b1f;
+    }
+
+    .purchase-section {
+      margin-top: 1.5rem;
+      border-top: 2px dashed #e9e9ef;
+      padding-top: 1.5rem;
+    }
+
+    .purchase-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: -0.2px;
+    }
+
+    .hq-desc {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0.4rem 0 0.9rem;
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1f2b3c;
+      background: #f0f2f8;
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      margin: 0.5rem 0 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .payment-info {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      background: #f7f9fc;
+      padding: 0.5rem 0.8rem;
+      border-radius: 40px;
+      width: fit-content;
+      color: #2e5e3b;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-info::before {
+      content: "🔒";
+      font-size: 0.9rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.8rem;
+    }
+
+    .btn {
+      flex: 1;
+      text-align: center;
+      padding: 0.85rem 0;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      font-family: inherit;
+      background: none;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: #0f172a;
+      color: white;
+      box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #2d3a5e;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1.8px solid #b9b9cf;
+      color: #2d2d42;
+    }
+
+    .btn-secondary:hover {
+      border-color: #0f172a;
+      background: #f5f5ff;
+      transform: translateY(-2px);
+    }
+
+    .or-divider {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #888;
+      margin: 0 0.2rem;
+    }
+
+    /* Modal pour le choix de qualité */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 2.2rem;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+
+    .active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      color: #0b0b1f;
+    }
+
+    .quality-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .quality-link {
+      display: block;
+      background: #f5f5fa;
+      padding: 1rem;
+      border-radius: 60px;
+      font-weight: 700;
+      color: #0f172a;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      border: 2px solid transparent;
+      font-size: 1.05rem;
+    }
+
+    .quality-link:hover {
+      background: #e9e9f5;
+      border-color: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    .quality-link.best {
+      background: #0f172a;
+      color: white;
+    }
+
+    .quality-link.best:hover {
+      background: #1e2a4a;
+    }
+
+    .close-modal {
+      background: none;
+      border: 1.8px solid #b9b9cf;
+      color: #2d2d42;
+      padding: 0.75rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .close-modal:hover {
+      border-color: #0f172a;
+      background: #f5f5ff;
+    }
+
+    @media (max-width: 480px) {
+      .card-content {
+        padding: 1.3rem 1.2rem;
+      }
+      .movie-title {
+        font-size: 1.8rem;
+      }
+      .price {
+        font-size: 1.6rem;
+      }
+      .button-group {
+        flex-direction: column;
+      }
+      .or-divider {
+        margin: 0.2rem 0;
+      }
+      .btn {
+        width: 100%;
+      }
+      .modal-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="movie-card">
+    <div class="hero-image">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t39.30808-6/682595006_122113881507282788_930690235765717667_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeEhNKEuj8rKW23KcgFD-SrG768wpE6v2qDvrzCkTq_aoKQ0TGkAqruWELGpIcrNCYyBzWjjv34yoErghHAbYl2o&_nc_ohc=btt8JsBea7AQ7kNvwFHQgu2&_nc_oc=AdrxCKTpwClYPJSFWc0-4XJNkug3eGLZn7Gvwi_q77j7SB3Qs1h47dSzmGikJCoNRZY&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_gid=u-j4BtMumNc5I3aS-mtdjA&_nc_ss=7b2a8&oh=00_Af27RDkGz9fqHDDcHJuUHhu5TVOB2hCkrZbLyZRdg8xy7Q&oe=69F6BF50" alt="Affiche du film Sorona">
+    </div>
+    <div class="card-content">
+      <div class="title-section">
+        <h1 class="movie-title">Sorona</h1>
+        <div class="director">Réalisé par Boodji Prod</div>
+      </div>
+
+      <div class="rating-row">
+        <div class="stars">
+          <span class="star-filled">★</span>
+          <span class="star-filled">★</span>
+          <span class="star-filled">★</span>
+          <span class="star-filled">★</span>
+          <span class="star-filled">★</span>
+        </div>
+        <div class="review-count">(128 avis)</div>
+      </div>
+
+      <div class="meta-badge">
+        <span class="meta-item">2026</span>
+        <span class="meta-item">Drame</span>
+        <span class="meta-item">1h 03min</span>
+        <span class="meta-item age-rating">+13</span>
+      </div>
+
+      <div class="synopsis">
+        Une île nommée Antsoheribory, figée dans ses traditions et protégée par le royaume sakalava, refuse depuis toujours tout étranger. Jusqu’au jour où un homme surgit… et fait vaciller l’ordre établi. Dès lors, le roi, prêt à tout pour préserver son pouvoir, décide d’accomplir un sacrifice 'sorona' en sacrifiant un enfant innocent.
+      </div>
+
+      <div class="actors">
+        <span class="actors-label">Acteurs :</span> Boodji Dodo, Mohamed Fazilla
+      </div>
+
+      <div class="purchase-section">
+        <h2 class="purchase-title">Acheter ce film</h2>
+        <div class="hq-desc">Accédez immédiatement au film en haute qualité.</div>
+        <div class="price">3 000 AR</div>
+        <div class="payment-info">Paiement sécurisé par MVola et Orange Money</div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" id="voirFilmBtn">VOIR LE FILM</button>
+          <span class="or-divider">ou</span>
+          <button class="btn btn-secondary" id="telechargerBtn">TELECHARGER</button>
+        </div>
+      </div>
+
+      <div style="font-size: 0.7rem; text-align: center; margin-top: 1.8rem; color: #a0a0b5; border-top: 1px solid #edeef5; padding-top: 1rem;">
+        streaming haute qualité · disponible immédiatement
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de choix de qualité -->
+  <div class="modal-overlay" id="qualityModal">
+    <div class="modal-box">
+      <h3 class="modal-title" id="modalTitle">Choisissez la qualité</h3>
+      <div class="quality-options" id="qualityOptions">
+        <!-- Rempli dynamiquement par JavaScript -->
+      </div>
+      <button class="close-modal" id="closeModal">Annuler</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---- Configuration des liens avec les URLs Mega fournies ----
+      const STREAMING_LINKS = {
+        original: 'https://mega.nz/file/hU8AGBiT#Ed5Oj7Fu0wsQmZw1nNKqNucdyhHXritdA7K7h4OtjzY',
+        '1080p': 'https://mega.nz/file/5MtHAKhB#jbMxZAItmYAGxuteRgYoJOGWvyzxRdC5WZDo6UiRvNY',
+        '720p': 'https://mega.nz/file/Md02yBib#NJBkHQOSY7G9voJm47d59-hbHXv0rw9OJjalai3y00Y'
+      };
+      const DOWNLOAD_LINKS = {
+        original: 'https://mega.nz/file/hU8AGBiT#Ed5Oj7Fu0wsQmZw1nNKqNucdyhHXritdA7K7h4OtjzY',
+        '1080p': 'https://mega.nz/file/5MtHAKhB#jbMxZAItmYAGxuteRgYoJOGWvyzxRdC5WZDo6UiRvNY',
+        '720p': 'https://mega.nz/file/Md02yBib#NJBkHQOSY7G9voJm47d59-hbHXv0rw9OJjalai3y00Y'
+      };
+
+      const voirBtn = document.getElementById('voirFilmBtn');
+      const telechargerBtn = document.getElementById('telechargerBtn');
+      const modal = document.getElementById('qualityModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const qualityOptionsContainer = document.getElementById('qualityOptions');
+      const closeModalBtn = document.getElementById('closeModal');
+
+      // Type d'action actuel : 'stream' ou 'download'
+      let currentAction = 'stream';
+
+      function buildQualityLinks(linksObject) {
+        // Vide le conteneur
+        qualityOptionsContainer.innerHTML = '';
+        // Crée un lien pour chaque qualité
+        Object.entries(linksObject).forEach(([quality, url]) => {
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';     // Ouvre dans un nouvel onglet
+          link.rel = 'noopener';
+          link.className = 'quality-link' + (quality === 'original' ? ' best' : '');
+          link.textContent = quality === 'original' ? '🎬 Original (qualité maximale)' : `📺 ${quality}`;
+          qualityOptionsContainer.appendChild(link);
+        });
+      }
+
+      function openModal(action) {
+        currentAction = action;
+        if (action === 'stream') {
+          modalTitle.textContent = '🎬 Voir le film en streaming';
+          buildQualityLinks(STREAMING_LINKS);
+        } else if (action === 'download') {
+          modalTitle.textContent = '📥 Télécharger le film';
+          buildQualityLinks(DOWNLOAD_LINKS);
+        }
+        modal.classList.add('active');
+      }
+
+      function closeModal() {
+        modal.classList.remove('active');
+      }
+
+      // Événements
+      voirBtn.addEventListener('click', () => openModal('stream'));
+      telechargerBtn.addEventListener('click', () => openModal('download'));
+      closeModalBtn.addEventListener('click', closeModal);
+      // Fermer en cliquant en dehors de la boîte
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      // Fermer avec la touche Échap
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

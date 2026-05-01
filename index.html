@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>FAHED · Sorona | Français & Malagasy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background-color: #0b0e12;
+      color: #e0e0e0;
+      line-height: 1.5;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+    html {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .top-header {
+      background: #12161e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 2.5rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #2a2f3c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      position: relative;
+      z-index: 100;
+    }
+    .brand-logo {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-weight: 500;
+    }
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.25s;
+      padding: 0.5rem 0;
+      cursor: pointer;
+    }
+    .nav-links a:hover { color: #d4af37; }
+    .search-user-area {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .search-container {
+      background: #1e2430;
+      border-radius: 30px;
+      padding: 0.4rem 1rem;
+      display: flex;
+      align-items: center;
+      border: 1px solid #333b4a;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .search-container i {
+      color: #d4af37;
+      font-size: 1.2rem;
+    }
+    .search-container:hover {
+      background: #2a2f3c;
+    }
+    .lang-selector {
+      display: flex;
+      gap: 0.5rem;
+      background: #1e2430;
+      padding: 0.3rem 0.8rem;
+      border-radius: 40px;
+      border: 1px solid #3a445a;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: #b9c2d4;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      border-radius: 30px;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: #d4af37;
+      color: #0b0e12;
+    }
+    .lang-btn:hover:not(.active) {
+      color: #d4af37;
+    }
+    /* PANEL DE RECHERCHE */
+    .search-panel, .category-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #0f141cd9;
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      padding: 1.2rem 2rem;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease-in-out;
+      border-bottom: 1px solid #d4af37;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    .search-panel.open, .category-panel.open {
+      transform: translateY(0);
+    }
+    .search-panel .search-input-wrapper, .category-panel .search-input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #1e2430;
+      border-radius: 50px;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid #d4af37;
+      margin-bottom: 1.5rem;
+    }
+    .search-panel .search-input-wrapper i, .category-panel .search-input-wrapper i {
+      color: #d4af37;
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+    .search-panel input, .category-panel input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 1.1rem;
+      width: 100%;
+    }
+    .close-search, .close-category {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      color: #d4af37;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+    .result-card {
+      background: #1b2330;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border 0.2s;
+      border: 1px solid transparent;
+    }
+    .result-card:hover {
+      transform: scale(1.02);
+      border-color: #d4af37;
+    }
+    .result-card img {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+    }
+    .result-card .result-title {
+      padding: 0.6rem;
+      text-align: center;
+      font-weight: 600;
+      color: #ecd89e;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: #bbb;
+    }
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('https://scontent-jnb2-1.xx.fbcdn.net/v/t39.30808-6/644491177_122102846211282788_812659788589272784_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGEsVMwhDZrQ1IE3crBlzU87KyuEdGirpzsrK4R0aKunAii1kolvCGAPUf0a5EIOXyosmFAUZt3akqpsYZKcCP_&_nc_ohc=SLKXmpEy2NkQ7kNvwGzCUUf&_nc_oc=AdpHF2oHNUEv664h28JpN3Jfoz6gLFVD1i_zEI5clOIdsy16nJepkxlAYGQlZiKGMr8&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_gid=I7IHyCYO7McEiX_Pf_7peQ&_nc_ss=7b2a8&oh=00_Af2m3J7xDbxrvt3asJyiIN8spxNw5jFfU3RJTwZxbBOVrQ&oe=69F3D964') center/cover no-repeat;
+      padding: 3.5rem 2.5rem;
+      border-bottom: 2px solid #2a3340;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .hero-text { max-width: 800px; }
+    .prod-badge {
+      color: #c9a23d;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+    .hero-text h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #f0e1b9;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+      letter-spacing: 8px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+    }
+    .hero-sub { 
+      font-size: 1.3rem; 
+      color: #b9bfd4; 
+      margin-bottom: 1.5rem; 
+      text-shadow: 1px 1px 5px black;
+    }
+    .hero-synopsis {
+      font-style: italic;
+      color: #cbd5e0;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid #d4af37;
+      border-radius: 6px;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      backdrop-filter: blur(2px);
+    }
+    .hero-buttons { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .btn-gold, .btn-outline-light, .btn-pay {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-gold:hover, .btn-outline-light:hover, .btn-pay:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.5) !important;
+    }
+    .btn-gold:active, .btn-outline-light:active, .btn-pay:active {
+      transform: scale(0.96);
+    }
+    .btn-gold {
+      background: #d4af37;
+      border: none;
+      color: #0b0e12;
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+    }
+    .btn-outline-light {
+      background: transparent;
+      border: 2px solid #d4af37;
+      color: #ecd89e;
+      font-weight: 600;
+      padding: 0.9rem 2rem;
+      border-radius: 40px;
+      font-size: 1.1rem;
+    }
+    .btn-pay {
+      background: #d4af37;
+      width: 100%;
+      border: none;
+      padding: 1.1rem;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      border-radius: 50px;
+      margin: 1.2rem 0 1rem;
+      color: #0b0e12;
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple-anim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
+    .payment-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-card {
+      background: #11161f;
+      border-radius: 32px;
+      max-width: 480px;
+      width: 90%;
+      padding: 2rem 1.8rem;
+      border: 1px solid #d4af37;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.6);
+      text-align: center;
+      animation: fadeSlideUp 0.3s ease-out;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-card h3 { font-size: 1.9rem; font-weight: 800; color: #f3e6c4; margin-bottom: 0.5rem; }
+    .modal-price { font-size: 2rem; font-weight: 800; color: #d4af37; margin: 0.5rem 0 1rem; }
+    .payment-options { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+    .pay-option-btn {
+      background: #1e2432;
+      border: 1.5px solid #3a445a;
+      border-radius: 70px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1.2rem;
+      color: #e9eef5;
+    }
+    .pay-option-btn i { font-size: 1.8rem; width: 40px; }
+    .pay-option-btn .option-name { flex: 1; text-align: left; font-weight: 700; }
+    .pay-option-btn .chevron-right { color: #d4af37; }
+    .close-modal-btn {
+      background: transparent;
+      border: none;
+      color: #b9b9d0;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+      padding: 0.8rem;
+    }
+    .modal-note { font-size: 0.8rem; background: #0f141c; padding: 0.6rem; border-radius: 40px; margin-top: 1rem; }
+    .detail-purchase-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2rem;
+      padding: 2.8rem 2.5rem;
+      background: #11161f;
+    }
+    .info-box {
+      background: #161c26;
+      border-radius: 18px;
+      padding: 2rem;
+      border: 1px solid #252e3c;
+    }
+    .title-cover-row { display: flex; align-items: center; gap: 20px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .cover-thumb {
+      width: 130px;
+      height: 97px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .title-hd-group { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .title-hd-group h2 { font-size: 2.2rem; font-weight: 700; color: #f2e1a8; }
+    .hd-badge { background: #d4af37; color: #0b0e12; font-weight: 800; padding: 4px 10px; border-radius: 4px; }
+    .director { color: #9aa4b8; margin-bottom: 0.8rem; }
+    .movie-meta-inline { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; margin: 15px 0; color: #b9c2d4; }
+    .movie-meta-inline .star-rating i { color: #d4af37; }
+    .movie-meta-inline .badge { background: #242d3a; padding: 4px 12px; border-radius: 20px; color: #d4af37; }
+    .synopsis-detail { font-style: italic; margin: 1.2rem 0; padding: 1rem; line-height: 1.7; }
+    .actors-line { color: #c0c8d8; margin-top: 1rem; }
+    .purchase-box {
+      background: #1c2330;
+      border-radius: 20px;
+      padding: 2.2rem 2rem;
+      border: 1px solid #2e3749;
+    }
+    .purchase-box h3 { font-size: 1.9rem; color: #f3e6c4; }
+    .price { font-size: 2.8rem; font-weight: 800; margin: 0.8rem 0 1.2rem; color: white; }
+    .payment-method {
+      background: #3b4b5e;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+      color: #ffd966;
+      margin-bottom: 1.8rem;
+    }
+    .btn-outline-light.alt-payment-btn { margin: 1rem auto 1.8rem; display: block; width: fit-content; }
+    .features-list { list-style: none; margin-top: 1rem; }
+    .features-list li { margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+    .features-list i { color: #d4af37; }
+    .cast-section { background: #0f141d; padding: 3rem 2.5rem; text-align: center; border-top: 1px solid #293140; }
+    .cast-section h2 { font-size: 2.2rem; color: #d4af37; margin-bottom: 2.2rem; }
+    .cast-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+    .cast-card { background: #1b2330; border-radius: 14px; padding: 1.5rem 1rem; border: 1px solid #2d3648; transition: transform 0.2s; }
+    .cast-avatar {
+      width: 100%;
+      max-width: 140px;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+      background: #12161e;
+      border: 1px solid #d4af37;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    .cast-name { font-size: 1.1rem; font-weight: 700; color: #e5d5a4; margin-top: 0.8rem; }
+    .site-footer { background: #000000; padding: 2rem 2.5rem; text-align: center; color: #7a8395; border-top: 1px solid #222; }
+    .footer-contact { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .footer-contact p { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .footer-contact i { color: #d4af37; }
+    .copyright { border-top: 1px solid #2a2a2a; padding-top: 1rem; }
+    @media (max-width: 768px) {
+      .top-header { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 0.8rem 1.2rem; }
+      .nav-links { width: 100%; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+      .search-user-area { width: 100%; justify-content: center; flex-wrap: wrap; }
+      .hero { padding: 2rem 1.2rem; min-height: auto; }
+      .hero-text h1 { font-size: 2.6rem; letter-spacing: 4px; }
+      .hero-sub { font-size: 1rem; }
+      .hero-buttons { justify-content: center; width: 100%; }
+      .btn-gold, .btn-outline-light { width: 100%; text-align: center; padding: 0.8rem; font-size: 1rem; }
+      .detail-purchase-grid { grid-template-columns: 1fr; padding: 1.5rem; gap: 1.5rem; }
+      .cast-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .cast-section h2 { font-size: 1.7rem; }
+      .cast-name { font-size: 0.9rem; }
+      .cast-avatar { max-width: 110px; }
+      .modal-card { padding: 1.5rem; width: 95%; }
+      .modal-card h3 { font-size: 1.5rem; }
+      .pay-option-btn { padding: 0.8rem 1rem; font-size: 1rem; }
+      .results-grid { grid-template-columns: repeat(2, 1fr); }
+      .search-panel, .category-panel { padding: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .hero-text h1 { font-size: 2rem; letter-spacing: 3px; }
+      .cast-grid { grid-template-columns: 1fr; }
+      .btn-outline-light.alt-payment-btn { width: 100%; }
+      .brand-logo { height: 35px; }
+      .cast-avatar { max-width: 130px; }
+    }
+
+    /* Styles pour les modales MVola et Orange */
+    #mvolaModal .modal-card {
+      background: #ffffff;
+      color: #1e2a3a;
+      border: 1px solid #cce5ff;
+      box-shadow: 0 30px 45px -15px rgba(0,0,0,0.4);
+      text-align: left;
+    }
+    #mvolaModal .close-modal-btn { color: #004c73; font-weight: 600; }
+    #mvolaModal .modal-card h3 { color: #004c73; }
+
+    #mvolaModal .payment-card, #orangeModal .payment-card {
+      max-width: 100%;
+      background: #ffffff;
+      border-radius: 42px;
+      overflow: hidden;
+    }
+    #mvolaModal .card-header {
+      background: #f0f5fe;
+      padding: 1.8rem 1.8rem 1rem 1.8rem;
+      border-bottom: 1px solid #d9e6fa;
+    }
+    #orangeModal .card-header {
+      background: #fff7f0;
+      padding: 1.8rem 1.8rem 1rem 1.8rem;
+      border-bottom: 1px solid #ffe1c4;
+    }
+    #mvolaModal .badge-warning {
+      background: #e6f0ff;
+      color: #0066b3;
+    }
+    #orangeModal .badge-warning {
+      background: #ffede0;
+      color: #c45a00;
+    }
+    .badge-warning {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      padding: 0.25rem 0.8rem;
+      border-radius: 30px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    #mvolaModal .compte-block {
+      background: linear-gradient(95deg, #0088cc 0%, #006bb3 100%);
+      box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+      animation: gentlePulse 1.8s infinite ease-in-out;
+    }
+    #orangeModal .compte-block {
+      background: linear-gradient(95deg, #f15a24 0%, #e64a19 100%);
+      box-shadow: 0 4px 12px rgba(241,90,36,0.3);
+      animation: orangePulse 1.8s infinite ease-in-out;
+    }
+    .compte-block {
+      border-radius: 40px;
+      padding: 0.6rem 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    @keyframes gentlePulse {
+      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3); }
+      50% { transform: scale(1.01); box-shadow: 0 6px 18px rgba(0, 136, 204, 0.5); }
+      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3); }
+    }
+    @keyframes orangePulse {
+      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(241,90,36,0.3); }
+      50% { transform: scale(1.01); box-shadow: 0 6px 18px rgba(241,90,36,0.5); }
+      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(241,90,36,0.3); }
+    }
+    .compte-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.2rem 0.7rem;
+      border-radius: 60px;
+    }
+    .compte-nom {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      word-break: break-word;
+    }
+    .numero-autorise {
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      margin-bottom: 1rem;
+    }
+    #mvolaModal .numero-autorise {
+      color: #1a5d8f;
+      background: #e4effa;
+    }
+    #orangeModal .numero-autorise {
+      color: #6b3a1a;
+      background: #fff0e4;
+    }
+    .numero-autorise strong {
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    #mvolaModal .numero-autorise strong { color: #0077be; }
+    #orangeModal .numero-autorise strong { color: #d45500; }
+    .notice {
+      padding: 0.8rem 1rem;
+      border-radius: 20px;
+      margin: 0.5rem 0 0.2rem 0;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    #mvolaModal .notice {
+      background: #eef4fc;
+      color: #1a5f8c;
+      border-left: 3px solid #ffaa33;
+    }
+    #orangeModal .notice {
+      background: #fff4e5;
+      color: #b45a1c;
+      border-left: 3px solid #ff9b44;
+    }
+    .code-section {
+      background: #ffffff;
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid #e6edf6;
+    }
+    #orangeModal .code-section { border-bottom: 1px solid #f7ede3; }
+    .code-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.7rem;
+    }
+    #mvolaModal .code-label { color: #0070b3; }
+    #orangeModal .code-label { color: #b45a2c; }
+    .code-container {
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.2rem 0.2rem 0.2rem 1.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid;
+    }
+    #mvolaModal .code-container {
+      background: #f2f8ff;
+      border-color: #cce5ff;
+    }
+    #orangeModal .code-container {
+      background: #fef7f0;
+      border-color: #ffdfc2;
+    }
+    .code-text {
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      word-break: break-all;
+    }
+    #mvolaModal .code-text { color: #003366; }
+    #orangeModal .code-text { color: #5c2e0a; }
+    .copy-btn {
+      border: none;
+      color: white;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      box-shadow: 0 2px 5px rgba(0, 136, 204, 0.2);
+    }
+    #mvolaModal .copy-btn { background: #0088cc; }
+    #mvolaModal .copy-btn:hover { background: #0070b3; }
+    #orangeModal .copy-btn { background: #f15a24; }
+    #orangeModal .copy-btn:hover { background: #e04c1a; }
+
+    /* Boîte de confirmation (attente + bouton) */
+    .confirmation-box {
+      margin-top: 0.8rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      text-align: center;
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: none; /* cachée par défaut */
+    }
+    #mvolaModal .confirmation-box {
+      background: #f2f8ff;
+      border: 1px solid #cce5ff;
+      color: #004c73;
+    }
+    #orangeModal .confirmation-box {
+      background: #fef7f0;
+      border: 1px solid #ffdfc2;
+      color: #5c2e0a;
+    }
+
+    /* Effet sablier tournant */
+    .spin-hourglass {
+      display: inline-block;
+      animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Bouton J'AI PAYÉ (dans la boîte de confirmation) */
+    #mvolaModal .btn-paid, #orangeModal .btn-paid {
+      background: #d4af37;
+      color: #0b0e12;
+      font-weight: 800;
+      font-size: 1.4rem;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      width: 100%;
+      margin: 0.5rem 0 0.2rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 15px rgba(212,175,55,0.3);
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s;
+      display: none; /* caché au départ */
+    }
+    #mvolaModal .btn-paid:hover, #orangeModal .btn-paid:hover { background: #e6bf4a; }
+
+    .instructions {
+      padding: 1.4rem 1.8rem 0.8rem 1.8rem;
+      background: #ffffff;
+    }
+    .step-list { list-style: none; margin: 1rem 0 0.5rem; }
+    .step-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      margin-bottom: 1rem; font-size: 0.9rem; font-weight: 500;
+    }
+    #mvolaModal .step-list li { color: #1e2a3a; }
+    #orangeModal .step-list li { color: #2b2b2b; }
+    .step-number {
+      width: 24px; height: 24px;
+      border-radius: 30px; display: inline-flex; align-items: center;
+      justify-content: center; font-weight: 800; font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    #mvolaModal .step-number { background: #e2effa; color: #0088cc; }
+    #orangeModal .step-number { background: #fff0e4; color: #d45500; }
+    .highlight { font-weight: 700; padding: 0 4px; border-radius: 12px; }
+    #mvolaModal .highlight { background: #eef4fa; }
+    #orangeModal .highlight { background: #fff0e0; }
+    .montant-box {
+      border-radius: 28px; margin: 1.2rem 1.8rem; padding: 1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: baseline;
+      flex-wrap: wrap; gap: 10px;
+    }
+    #mvolaModal .montant-box {
+      background: linear-gradient(115deg, #ebf4fc 0%, #e1eefa 100%);
+      border: 1px solid #c5def5;
+    }
+    #orangeModal .montant-box {
+      background: linear-gradient(115deg, #fff5ec, #ffeada);
+      border: 1px solid #ffd9bb;
+    }
+    .montant-label { font-size: 0.85rem; font-weight: 600; }
+    #mvolaModal .montant-label { color: #006699; }
+    #orangeModal .montant-label { color: #aa531c; }
+    .montant-valeur { font-size: 2rem; font-weight: 800; }
+    #mvolaModal .montant-valeur { color: #004c73; }
+    #orangeModal .montant-valeur { color: #862e00; }
+    .footer-note {
+      padding: 1rem 1.8rem 1.5rem 1.8rem;
+      border-top: 1px solid;
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    #mvolaModal .footer-note {
+      background: #f8fbfe;
+      border-color: #daecfc;
+      color: #2f6b96;
+    }
+    #orangeModal .footer-note {
+      background: #fefaf5;
+      border-color: #ffe1ca;
+      color: #a45f34;
+    }
+    .badge-sm {
+      border-radius: 30px;
+      padding: 0.2rem 0.8rem;
+      font-weight: 500;
+    }
+    #mvolaModal .badge-sm { background: #e9f2fa; }
+    #orangeModal .badge-sm { background: #fff1e7; }
+    .audio-badge {
+      padding: 0.2rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    #mvolaModal .audio-badge { background: #ecf3fa; }
+    #orangeModal .audio-badge { background: #fff1e7; }
+    hr { margin: 0 1.8rem; border: 0; }
+    #mvolaModal hr { border-top: 1px solid #d8e8f5; }
+    #orangeModal hr { border-top: 1px solid #ffebdd; }
+    .back-btn {
+      background: none;
+      border: 1px solid;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      margin: 0.8rem 0 0 1.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: block;
+    }
+    #mvolaModal .back-btn { color: #0088cc; border-color: #0088cc; }
+    #mvolaModal .back-btn:hover { background: #e6f0ff; }
+    #orangeModal .back-btn { color: #f15a24; border-color: #f15a24; }
+    #orangeModal .back-btn:hover { background: #fff0e5; }
+    .back-link {
+      display: block; text-align: center; margin: 0.5rem 0 1.5rem;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+    }
+    #mvolaModal .back-link { color: #0088cc; }
+    #orangeModal .back-link { color: #f15a24; }
+  </style>
+</head>
+<body>
+
+<header class="top-header">
+  <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t39.30808-6/639063365_122095538643286225_348622714064379806_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGwT_kBCzJonhlOCMBjtWx5S-Fn88il9ZpL4WfzyKX1mvWN3SZR5wqv73CZoGc6i-28sRRPzkHwch1a8vNzoSMb&_nc_ohc=ZCcgYon7mwkQ7kNvwHo4piv&_nc_oc=Adqm6IbB9loTGd8gATrvL-bJCWYmK5uRbHPeGIuh-P03DUjU-9nhXdyQCqx8c1TmvdM&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_gid=wu85v9iy3-1IBfb-gEhF4w&_nc_ss=7b2a8&oh=00_Af2ABCPzTwutWg4EVIDh0RY-odW2rN80WlPw17-P4PfreA&oe=69F3D940" alt="Logo FAHED" class="brand-logo">
+  <div class="nav-links">
+    <a href="#" data-i18n="home">Accueil</a>
+    <a href="#" id="filmsNavLink" data-i18n="movies">Films</a>
+    <a href="#" id="nouveautesNavLink" data-i18n="new">Nouveautés</a>
+  </div>
+  <div class="search-user-area">
+    <div class="search-container" id="searchIcon">
+      <i class="fas fa-search"></i>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="mg">MG</button>
+    </div>
+  </div>
+</header>
+
+<!-- PANEL DE RECHERCHE -->
+<div id="searchPanel" class="search-panel">
+  <button class="close-search" id="closeSearchBtn">&times;</button>
+  <div class="search-input-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Rechercher un film..." autocomplete="off">
+  </div>
+  <div id="searchResults" class="results-grid"></div>
+</div>
+
+<!-- PANEL POUR FILMS ET NOUVEAUTÉS -->
+<div id="categoryPanel" class="category-panel">
+  <button class="close-category" id="closeCategoryBtn">&times;</button>
+  <div class="search-input-wrapper">
+    <i class="fas fa-film"></i>
+    <span style="color:#d4af37; font-weight:bold;" id="categoryTitle">Films</span>
+  </div>
+  <div id="categoryResults" class="results-grid"></div>
+</div>
+
+<section class="hero" id="filmHero">
+  <div class="hero-text">
+    <div class="prod-badge" data-i18n="prod_badge"><i class="fas fa-film"></i> UN FILM DE BOODJI PROD</div>
+    <h1>SORONA</h1>
+    <div class="hero-sub" data-i18n="hero_sub">BOODJI DODO & MOHAMED FAZILLA</div>
+    <div class="hero-synopsis" data-i18n="synopsis">
+      <i class="fas fa-quote-left" style="color:#d4af37;"></i>
+      Une île nommée Antsoheribory, figée dans ses traditions et protégée par le royaume sakalava, refuse depuis toujours tout étranger. Jusqu’au jour où un homme surgit… et fait vaciller l’ordre établi. Dès lors, le roi, prêt à tout pour préserver son pouvoir, décide d’accomplir un sacrifice "sorona" en sacrifiant un enfant innocent.
+    </div>
+    <div class="hero-buttons">
+      <button class="btn-gold ripple-btn" id="buyNowGold" data-i18n="buy_now">ACHETER MAINTENANT</button>
+      <button class="btn-outline-light ripple-btn" onclick="openTrailer()" data-i18n="trailer">BANDE-ANNONCE</button>
+    </div>
+  </div>
+</section>
+
+<div class="detail-purchase-grid">
+  <div class="info-box">
+    <div class="title-cover-row">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t39.30808-6/644520420_122102846163282788_594613021025256756_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeFR5wstUgFyoh1utBZCmSXmiybmWir-W7yLJuZaKv5bvNxxW4RwN6Mq3RC5QpkNbqC6orI1P2cTAPGKK9OiYggl&_nc_ohc=Rrh53t9GxTwQ7kNvwGIwlVR&_nc_oc=AdpdYeiE-JlU9GM2rLLa3uVx19En2fEI5ENjPn095_Z6FvSbrPV0rqF6_knR4vPnP_Y&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_gid=-tnCPN0eqcOVZnV7M1ioag&_nc_ss=7b2a8&oh=00_Af3V6ydeNO3J9orFAwReI5rOAciFVDeEi8B9XoJ5Hlutmg&oe=69F3A6FD" alt="Affiche Sorona" class="cover-thumb">
+      <div class="title-hd-group">
+        <h2>Sorona</h2>
+        <span class="hd-badge">HD</span>
+      </div>
+    </div>
+    <div class="director" data-i18n="director">Réalisé par <strong>Boodji Prod</strong></div>
+    <div class="movie-meta-inline">
+      <span class="star-rating"><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i></span>
+      <span class="badge" data-i18n="reviews">128 avis</span> <span>•</span> <span data-i18n="year">2026</span> <span>•</span> <span data-i18n="genre">Drame</span> <span>•</span> <span data-i18n="duration">1h 03min</span> <span>•</span> <span data-i18n="age">+13</span>
+    </div>
+    <div class="synopsis-detail" data-i18n="synopsis_long">
+      <i class="fas fa-quote-left" style="color:#d4af37;"></i> 
+      Une île nommée Antsoheribory, figée dans ses traditions et protégée par le royaume sakalava, refuse depuis toujours tout étranger. Jusqu’au jour où un homme surgit… et fait vaciller l’ordre établi. Dès lors, le roi, prêt à tout pour préserver son pouvoir, décide d’accomplir un sacrifice "sorona" en sacrifiant un enfant innocent.
+    </div>
+    <div class="actors-line" data-i18n="actors"><i class="fas fa-users"></i> <strong>Acteurs :</strong> Aymane Ibrahim, Amine Ibrahim, Boodji Dodo, Mohamed Fazilla</div>
+  </div>
+
+  <div class="purchase-box">
+    <h3 data-i18n="buy_title">Acheter ce film</h3>
+    <p style="color:#b5c0d4;" data-i18n="buy_desc">Accédez immédiatement au film en haute qualité.</p>
+    <div class="price">3 000 AR</div>
+    <div class="payment-method" data-i18n="payment_method"> <i class="fas fa-mobile-alt"> </i>  Paiement sécurisé par MVola et Orange Money </div>
+    <button class="btn-pay ripple-btn" id="payNowButton" data-i18n="pay_now">PAYER MAINTENANT</button>
+    <button class="btn-outline-light ripple-btn alt-payment-btn" id="otherPaymentsBtn" data-i18n="other_payments">AUTRES MOYENS DE PAIEMENT</button>
+    <ul class="features-list">
+      <li data-i18n="feature_hd"><i class="fas fa-check-circle"></i> Qualité HD</li>
+      <li data-i18n="feature_download"><i class="fas fa-download"></i> Téléchargement</li>
+      <li data-i18n="feature_lifetime"><i class="fas fa-infinity"></i> À vie</li>
+    </ul>
+  </div>
+</div>
+
+<section class="cast-section">
+  <h2 data-i18n="cast_title">ACTEURS ET ACTRICES VEDETTES</h2>
+  <div class="cast-grid">
+    <div class="cast-card">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t1.15752-9/582277950_1501068704792149_8619332964513828311_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeFYTpVPyCKZRh5BVzV-eXKT2q1FERye9gHarUURHJ72ATHXkN7A5Qo_lJc_xERodpaU67RqY0fWQ0NlRUakGLuk&_nc_ohc=TzbjVWYegqEQ7kNvwHxOi7m&_nc_oc=AdrvTivOdtjMxyGbW15kkFipC-ZJDAp8_Q46gLbqqHgIRmX5CjPc4yK8qxqkHS7kdyE&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_ss=7b2a8&oh=03_Q7cD5AGjUWGH-GAgLp5gpOmwN0gZXY0pegkz8FTtJG-0QirurQ&oe=6A180BCB" alt="Madany Mohamed" class="cast-avatar">
+      <div class="cast-name">Madany Mohamed</div>
+    </div>
+    <div class="cast-card">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t1.15752-9/675269508_1634267054289804_5155990743478875782_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeGBYOVpnW7jy2nIcnY0IBPKac2kCMb1OZFpzaQIxvU5kRJMScfdd4OvBwvmH3RZ7H95ZO8HVH51aZ6lS9htQalX&_nc_ohc=KjY93TnwXCMQ7kNvwExN7RS&_nc_oc=AdrEv95ltN2OHo9vURzRwfrFKaKwe4cbb73BWVrG2pfshI85KjvDVG5-vBMkTOQ-QpA&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_ss=7b2a8&oh=03_Q7cD5AHNwUnN9Nz7GsHFeD8T6j0rcBjGnGxAuLL4yb7zxIw-1g&oe=6A17F417" alt="Pôpo Hassan" class="cast-avatar">
+      <div class="cast-name">Pôpo Hassan</div>
+    </div>
+    <div class="cast-card">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t1.15752-9/679530818_818077177592098_7164905708282529674_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeF6_Xk3H9uddtNM1hOF_qeF0vBwLkt9cr7S8HAuS31yvvpmXmKNKXNgpUIYV42ApAiK0S0vhOd8PkHKXx6xt_qn&_nc_ohc=W-1VOVFdw-AQ7kNvwG09C0G&_nc_oc=Adqsc2S7QP4ii7JQ-M-zdDibRigX0q5BoiGLIvmX9u5bj9yK9V-OO1f0eehfZWlhw3Q&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_ss=7b2a8&oh=03_Q7cD5AHPwLKRPnDRNZLnJorGfznc_UIH_yYEUhJunc0zAydNQw&oe=6A180A70" alt="Mariam Elisah" class="cast-avatar">
+      <div class="cast-name">Mariam Elisah</div>
+    </div>
+    <div class="cast-card">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t1.15752-9/683572597_1476275124179443_6479153530608754152_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeG-jxLnsVSA1omd78FXvfZGUQ1nI_yMbLBRDWcj_IxssHVByrd5KMBmtRtXEXo426VRc8aXHKTm24IRUEQQujVR&_nc_ohc=crezLTrtZbMQ7kNvwG80AIT&_nc_oc=Adoj3CREFMqBuMumLSgibiHhYn1pPHfYUnwbH43AlpOmnXacsgHuKSBbvOsJ3gq1xgU&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_ss=7b2a8&oh=03_Q7cD5AHyugFmdeI3NiGbUp61u-vOmlvHFU_qMGKAsh8xZHH6BA&oe=6A18059B" alt="Didji Nadjid" class="cast-avatar">
+      <div class="cast-name">Didji Nadjid</div>
+    </div>
+    <div class="cast-card">
+      <img src="https://scontent-jnb2-1.xx.fbcdn.net/v/t1.15752-9/675581609_1496012908882230_138309525226182363_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHv7HAPGMx8-EAHmVcaksKcTLstjLJQj1xMuy2MslCPXDBM--MOI2yUYfaA7qJaIvxrGVjMu5v787ajXLe6FZhn&_nc_ohc=R9o6Nd6QaagQ7kNvwHzEdq1&_nc_oc=AdoTvZq3xNr2tvImOrd2PDeNwU_u7b37CQOX_dGHQM-3pKyZgYtEl5GdMAnEl-GKuHE&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_ss=7b2a8&oh=03_Q7cD5AGFZmx8BCDRr54u3P87ZsjML4LQXoiiabjlk3D0mHuasA&oe=6A17E521" alt="Dji Adjibo" class="cast-avatar">
+      <div class="cast-name">Dji Adjibo</div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    <p><i class="fas fa-envelope"></i> <span data-i18n="email_label">Email :</span> nantenainaadjibo@gmail.com</p>
+    <p><i class="fas fa-phone"></i> <span data-i18n="phone_label">Tél :</span> +261 37 70 044 97 / +261 38 11 041 29</p>
+    <p><i class="fab fa-whatsapp"></i> <span data-i18n="whatsapp_label">WhatsApp :</span> +261 32 67 482 48</p>
+    <p><i class="fab fa-facebook"></i> <span data-i18n="facebook_label">Facebook :</span> fb.com/boodji.brown</p>
+  </div>
+  <div class="copyright" data-i18n="copyright">© 2026 FAHED M'CHINDRA - Plateforme de streaming premium. Tous droits réservés.</div>
+</footer>
+
+<!-- MODALE DE CHOIX DE PAIEMENT -->
+<div id="paymentModal" class="payment-modal">
+  <div class="modal-card">
+    <h3 data-i18n="modal_title"><i class="fas fa-lock"></i> Choisissez votre moyen</h3>
+    <div class="modal-price">3 000 AR <span style="font-size:1rem;">(HD à vie)</span></div>
+    <div class="payment-options">
+      <div class="pay-option-btn" data-method="orange">
+        <i class="fas fa-credit-card" style="color:#ff6600;"></i>
+        <span class="option-name" data-i18n="orange_money">Orange Money</span>
+        <i class="fas fa-chevron-right chevron-right"></i>
+      </div>
+      <div class="pay-option-btn" data-method="mvola">
+        <i class="fas fa-mobile-alt" style="color:#25c2a0;"></i>
+        <span class="option-name" data-i18n="mvola">MVola</span>
+        <i class="fas fa-chevron-right chevron-right"></i>
+      </div>
+    </div>
+    <button class="close-modal-btn" id="closeModalBtn" data-i18n="cancel">Annuler</button>
+    <div class="modal-note" data-i18n="secure_note"><i class="fas fa-shield-alt"></i> Transaction 100% sécurisée</div>
+  </div>
+</div>
+
+<!-- MODALE MVola -->
+<div id="mvolaModal" class="payment-modal">
+  <div class="modal-card" style="background:#ffffff; color:#1e2a3a; max-width:500px; padding:0; border:none; box-shadow:0 30px 45px rgba(0,0,0,0.4);">
+    <div style="position:absolute; top:15px; right:20px; z-index:10;">
+      <button id="closeMvolaModalBtn" style="background:none; border:none; font-size:1.8rem; color:#004c73; cursor:pointer;">&times;</button>
+    </div>
+    <div class="payment-card">
+      <div class="card-header">
+        <div class="badge-warning">📱 MVola • TRANSACTION SÉCURISÉE</div>
+        <div class="compte-block">
+          <span class="compte-label">🏦 BÉNÉFICIAIRE</span>
+          <span class="compte-nom">ABIBA FLORENCIA</span>
+        </div>
+        <div class="numero-autorise">
+          📞 NUMÉRO AUTORISÉ UNIQUEMENT &nbsp;<strong>038 11 041 29</strong>
+        </div>
+        <div class="notice">
+          ⚠️ <i>AUCUN FRAIS DE TRANSFERT – ALEFA MANUEL NY MVOLA, KITIHO NY COPIER EO AMBANY</i><br>
+          <span style="font-size:0.7rem;">✓ Paiement au nom de ABIBA FLORENCIA – sans frais supplémentaire</span>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <div class="code-label">📲 CODE MVola À UTILISER (USSD)</div>
+        <div class="code-container" id="mvolaCodeContainer">
+          <span class="code-text" id="mvolaUssdCode">#111*1*2*0381104129*3000*2#</span>
+          <button class="copy-btn" id="mvolaCopyBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="white"/></svg>
+            Copier
+          </button>
+        </div>
+
+        <!-- Conteneur unique : attente + bouton (avec sablier tournant) -->
+        <div id="mvolaConfirmationBox" class="confirmation-box">
+          <span id="mvolaWaitText"><span class="spin-hourglass">⏳</span> En attente de confirmation…</span>
+          <a href="validation.html" class="btn-paid" id="mvolaPayBtn">✅ J'AI PAYÉ</a>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <div class="code-label">🪄 PROCÉDURE DE PAIEMENT MVola</div>
+        <ul class="step-list">
+          <li><span class="step-number">1</span> <span>Ouvrez votre application <strong>Mobile Money MVola</strong> ou composez le code <span class="highlight">#111#</span>.</span></li>
+          <li><span class="step-number">2</span> <span>Choisissez <strong>Transfert</strong> ou <strong>Envoi d'argent</strong> → Code USSD.</span></li>
+          <li><span class="step-number">3</span> <span>Saisissez le montant exact : <strong class="highlight">3 000 Ar</strong> (aucun frais).</span></li>
+          <li><span class="step-number">4</span> <span>Vérifiez le bénéficiaire <strong class="highlight">ABIBA FLORENCIA</strong> (038 11 041 29) avant validation.</span></li>
+        </ul>
+      </div>
+
+      <div class="montant-box">
+        <span class="montant-label">💰 MONTANT À ENVOYER (MVola)</span>
+        <span class="montant-valeur">3 000 <small>Ar</small></span>
+      </div>
+
+      <div class="footer-note" style="display:flex; justify-content:space-between;">
+        <div class="badge-sm"> Suivi(e) · MVola · ABIBA FLORENCIA</div>
+        <div class="audio-badge">TELMA</div>
+      </div>
+      <hr>
+      <div style="padding:0.9rem 1.8rem 1.5rem; font-size:0.68rem; color:#3377aa; text-align:center;">
+        🔁 Transaction instantanée MVola | Bénéficiaire : ABIBA FLORENCIA
+      </div>
+
+      <a href="FINAL%20BOODDJI%20PROJECT.html" class="back-link">← Retour au site</a>
+      <button class="back-btn" id="backToPaymentOptionsBtn" style="margin:0.8rem auto 1rem; display:block;">
+        <i class="fas fa-arrow-left"></i> Retour aux options de paiement
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE Orange Money -->
+<div id="orangeModal" class="payment-modal">
+  <div class="modal-card" style="background:#ffffff; color:#1e2a3a; max-width:500px; padding:0; border:none; box-shadow:0 30px 45px rgba(0,0,0,0.4);">
+    <div style="position:absolute; top:15px; right:20px; z-index:10;">
+      <button id="closeOrangeModalBtn" style="background:none; border:none; font-size:1.8rem; color:#c45a00; cursor:pointer;">&times;</button>
+    </div>
+    <div class="payment-card">
+      <div class="card-header">
+        <div class="badge-warning">🍊 ORANGE MONEY • TRANSACTION SÉCURISÉE</div>
+        <div class="compte-block">
+          <span class="compte-label">🏦 BÉNÉFICIAIRE</span>
+          <span class="compte-nom">ADJIBO</span>
+        </div>
+        <div class="numero-autorise">
+          📞 NUMÉRO AUTORISÉ UNIQUEMENT &nbsp;<strong>037 70 044 97</strong>
+        </div>
+        <div class="notice">
+          ⚠️ <i>AUCUN FRAIS DE TRANSFERT – UTILISEZ LE CODE USSD CI-DESSOUS</i><br>
+          <span style="font-size:0.7rem;">✓ Paiement au nom de ADJIBO – sans frais supplémentaire</span>
+        </div>
+      </div>
+
+      <div class="code-section">
+        <div class="code-label">📲 CODE ORANGE MONEY (USSD)</div>
+        <div class="code-container" id="orangeCodeContainer">
+          <span class="code-text" id="orangeUssdCode">#144*1*1*0377004497*0377004497*3000*2#</span>
+          <button class="copy-btn" id="orangeCopyBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="white"/></svg>
+            Copier
+          </button>
+        </div>
+
+        <!-- Conteneur unique : attente + bouton (avec sablier tournant) -->
+        <div id="orangeConfirmationBox" class="confirmation-box">
+          <span id="orangeWaitText"><span class="spin-hourglass">⏳</span> En attente de confirmation…</span>
+          <a href="validation.html" class="btn-paid" id="orangePayBtn">✅ J'AI PAYÉ</a>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <div class="code-label">🪄 PROCÉDURE DE PAIEMENT ORANGE MONEY</div>
+        <ul class="step-list">
+          <li><span class="step-number">1</span> <span>Ouvrez votre application <strong>Orange Money</strong> ou composez <span class="highlight">#144#</span>.</span></li>
+          <li><span class="step-number">2</span> <span>Choisissez <strong>Transfert</strong> puis <strong>Envoi vers un autre numéro Orange</strong>.</span></li>
+          <li><span class="step-number">3</span> <span>Saisissez le montant : <strong class="highlight">3 000 Ar</strong>.</span></li>
+          <li><span class="step-number">4</span> <span>Vérifiez le bénéficiaire : <strong class="highlight">ADJIBO</strong> (037 70 044 97).</span></li>
+        </ul>
+      </div>
+
+      <div class="montant-box">
+        <span class="montant-label">💰 MONTANT À ENVOYER (Orange)</span>
+        <span class="montant-valeur">3 000 <small>Ar</small></span>
+      </div>
+
+      <div class="footer-note">
+        <div class="badge-sm">Suivi(e) · Orange Money · ADJIBO</div>
+        <div class="audio-badge">ORANGE</div>
+      </div>
+      <hr>
+      <div style="padding: 0.9rem 1.8rem; font-size: 0.68rem; color: #b46f44; text-align: center;">
+        🔁 Transaction instantanée Orange Money | Bénéficiaire : ADJIBO
+      </div>
+
+      <a href="FINAL%20BOODDJI%20PROJECT.html" class="back-link">← Retour au site</a>
+      <button class="back-btn" id="orangeBackToOptionsBtn" style="margin:0.8rem auto 1rem; display:block;">
+        <i class="fas fa-arrow-left"></i> Retour aux options de paiement
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Traductions
+  const translations = {
+    fr: {
+      home: "Accueil", movies: "Films", new: "Nouveautés",
+      search_placeholder: "Rechercher un film...",
+      prod_badge: "UN FILM DE BOODJI PROD",
+      hero_sub: "BOODJI DODO & MOHAMED FAZILLA",
+      synopsis: "Une île nommée Antsoheribory, figée dans ses traditions et protégée par le royaume sakalava, refuse depuis toujours tout étranger. Jusqu’au jour où un homme surgit… et fait vaciller l’ordre établi. Dès lors, le roi, prêt à tout pour préserver son pouvoir, décide d’accomplir un sacrifice 'sorona' en sacrifiant un enfant innocent.",
+      buy_now: "ACHETER MAINTENANT", trailer: "BANDE-ANNONCE",
+      director: "Réalisé par ", reviews: "128 avis", year: "2026", genre: "Drame", duration: "1h 03min", age: "+13",
+      synopsis_long: "Une île nommée Antsoheribory, figée dans ses traditions et protégée par le royaume sakalava, refuse depuis toujours tout étranger. Jusqu’au jour où un homme surgit… et fait vaciller l’ordre établi. Dès lors, le roi, prêt à tout pour préserver son pouvoir, décide d’accomplir un sacrifice 'sorona' en sacrifiant un enfant innocent.",
+      actors: "Acteurs : Boodji Dodo, Mohamed Fazilla",
+      buy_title: "Acheter ce film", buy_desc: "Accédez immédiatement au film en haute qualité.",
+      payment_method: "Paiement sécurisé par MVola et Orange Money",
+      pay_now: "PAYER MAINTENANT", other_payments: "AUTRES MOYENS DE PAIEMENT",
+      feature_hd: "Qualité HD", feature_download: "Téléchargement", feature_lifetime: "À vie",
+      cast_title: "ACTEURS ET ACTRICES VEDETTES",
+      email_label: "Email :", phone_label: "Tél :", whatsapp_label: "WhatsApp :", facebook_label: "Facebook :",
+      copyright: "© 2026 FAHED M'CHINDRA - Plateforme de streaming premium. Tous droits réservés.",
+      modal_title: "Choisissez votre moyen", orange_money: "Orange Money", mvola: "MVola", cancel: "Annuler",
+      secure_note: "Transaction 100% sécurisée",
+      alert_payment: "✅ Paiement de 3 000 AR via {method}.\nRedirection vers le paiement sécurisé.\nFilm 'Sorona' ajouté à votre bibliothèque."
+    },
+    mg: {
+      home: "Fandraisana", movies: "Horonantsary", new: "Vaovao",
+      search_placeholder: "Hikaroka horonantsary...",
+      prod_badge: "HORONANTSARY NOFORIN'NY BOODJI PROD",
+      hero_sub: "BOODJI DODO & MOHAMED FAZILLA",
+      synopsis: "Nosy iray antsoina hoe Antsoheribory, mifikitra amin'ny fomban-drazana ary arovan'ny fanjakana sakalava, mandà hatrizay ny vahiny. Mandra-pahatongan'ny lehilahy iray... ka mampihontohona ny filaminana. Dia ny mpanjaka, vonona ny hanao zavatra rehetra hiarovana ny fahefany, manapa-kevitra ny hanao sorona 'sorona' amin'ny fanaovana sorona zaza tsy manan-tsiny.",
+      buy_now: "HIVIDY zAO", trailer: "TIRAILERA",
+      director: "Nataon'i ", reviews: "128 hevitra", year: "2026", genre: "Drama", duration: "1h 03mn", age: "+13",
+      synopsis_long: "Nosy iray antsoina hoe Antsoheribory, mifikitra amin'ny fomban-drazana ary arovan'ny fanjakana sakalava, mandà hatrizay ny vahiny. Mandra-pahatongan'ny lehilahy iray... ka mampihontohona ny filaminana. Dia ny mpanjaka, vonona ny hanao zavatra rehetra hiarovana ny fahefany, manapa-kevitra ny hanao sorona 'sorona' amin'ny fanaovana sorona zaza tsy manan-tsiny.",
+      actors: "Mpilalao : Boodji Dodo, Mohamed Fazilla",
+      buy_title: "Hividy ity horonantsary ity", buy_desc: "Midira avy hatrany amin'ny horonantsary avo lenta.",
+      payment_method: "Fandoavam-bola azo antoka amin'ny MVola sy Orange Money",
+      pay_now: "ALOAVO ATO", other_payments: "FOMBA FANDOAVANA HAFA",
+      feature_hd: "Kalitao HD", feature_download: "Misintona", feature_lifetime: "Mandrakizay",
+      cast_title: "MPILALAO MALAZA",
+      email_label: "Mailaka :", phone_label: "Tel :", whatsapp_label: "WhatsApp :", facebook_label: "Facebook :",
+      copyright: "© 2026 FAHED M'CHINDRA - Sehatra streaming premium. Zo rehetra voatokana.",
+      modal_title: "Misafidiana fomba", orange_money: "Orange Money", mvola: "MVola", cancel: "Ampy",
+      secure_note: "Fifanakalozana azo antoka 100%",
+      alert_payment: "✅ Fandoavam-bola 3 000 AR amin'ny alalan'ny {method}.\nHodirina any amin'ny fandoavam-bola azo antoka.\nNy horonantsary 'Sorona' dia nampiana tao amin'ny tranombokinao."
+    }
+  };
+
+  let currentLang = 'fr';
+  function setLanguage(lang) {
+    if (!translations[lang]) return;
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        if (el.tagName === 'INPUT' && el.placeholder !== undefined) {
+          el.placeholder = translations[lang][key];
+        } else if (el.tagName === 'BUTTON') {
+          const icon = el.querySelector('i');
+          if (icon && el.childNodes.length === 1) el.appendChild(document.createTextNode(translations[lang][key]));
+          else { el.innerText = translations[lang][key]; if (icon) el.prepend(icon); }
+        } else {
+          const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+          let replaced = false;
+          while(walker.nextNode()) {
+            const node = walker.currentNode;
+            if (node.textContent.trim() !== '' && node.parentElement?.getAttribute('data-i18n') === key) {
+              node.textContent = translations[lang][key];
+              replaced = true;
+            }
+          }
+          if (!replaced && el.childNodes.length === 0) el.innerText = translations[lang][key];
+        }
+      }
+    });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && translations[lang].search_placeholder) searchInput.placeholder = translations[lang].search_placeholder;
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      if (btn.getAttribute('data-lang') === lang) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+    const catTitleSpan = document.getElementById('categoryTitle');
+    if (catTitleSpan) {
+      if (lang === 'fr') catTitleSpan.innerText = "Films";
+      else catTitleSpan.innerText = "Horonantsary";
+    }
+  }
+
+  const moviesData = [
+    { 
+      title: "SORONA", 
+      image: "https://scontent-jnb2-1.xx.fbcdn.net/v/t39.30808-6/644520420_122102846163282788_594613021025256756_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeFR5wstUgFyoh1utBZCmSXmiybmWir-W7yLJuZaKv5bvNxxW4RwN6Mq3RC5QpkNbqC6orI1P2cTAPGKK9OiYggl&_nc_ohc=Rrh53t9GxTwQ7kNvwGIwlVR&_nc_oc=AdpdYeiE-JlU9GM2rLLa3uVx19En2fEI5ENjPn095_Z6FvSbrPV0rqF6_knR4vPnP_Y&_nc_zt=23&_nc_ht=scontent-jnb2-1.xx&_nc_gid=-tnCPN0eqcOVZnV7M1ioag&_nc_ss=7b2a8&oh=00_Af3V6ydeNO3J9orFAwReI5rOAciFVDeEi8B9XoJ5Hlutmg&oe=69F3A6FD", 
+      pageId: "filmHero" 
+    }
+  ];
+
+  const searchPanel = document.getElementById('searchPanel');
+  const searchIcon = document.getElementById('searchIcon');
+  const closeSearchBtn = document.getElementById('closeSearchBtn');
+  const searchInputField = document.getElementById('searchInput');
+  const searchResultsContainer = document.getElementById('searchResults');
+
+  function openSearch() {
+    searchPanel.classList.add('open');
+    searchInputField.focus();
+    renderSearchResults('');
+  }
+  function closeSearch() {
+    searchPanel.classList.remove('open');
+    searchResultsContainer.innerHTML = '';
+    searchInputField.value = '';
+  }
+  searchIcon.addEventListener('click', openSearch);
+  closeSearchBtn.addEventListener('click', closeSearch);
+  document.addEventListener('click', (e) => {
+    if (searchPanel.classList.contains('open') && !searchPanel.contains(e.target) && e.target !== searchIcon && !searchIcon.contains(e.target)) {
+      closeSearch();
+    }
+  });
+
+  function renderSearchResults(query) {
+    const filtered = moviesData.filter(m => m.title.toLowerCase().includes(query.toLowerCase()));
+    if (filtered.length === 0) {
+      searchResultsContainer.innerHTML = '<div class="no-results">Aucun film trouvé</div>';
+      return;
+    }
+    searchResultsContainer.innerHTML = filtered.map(movie => `
+      <div class="result-card" data-title="${movie.title}" data-page="${movie.pageId}">
+        <img src="${movie.image}" alt="${movie.title}" loading="lazy">
+        <div class="result-title">${movie.title}</div>
+      </div>
+    `).join('');
+    document.querySelectorAll('#searchResults .result-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const pageId = card.getAttribute('data-page');
+        const element = document.getElementById(pageId);
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeSearch();
+      });
+    });
+  }
+  searchInputField.addEventListener('input', (e) => renderSearchResults(e.target.value));
+  renderSearchResults('');
+
+  const categoryPanel = document.getElementById('categoryPanel');
+  const closeCategoryBtn = document.getElementById('closeCategoryBtn');
+  const categoryResultsContainer = document.getElementById('categoryResults');
+  const filmsLink = document.getElementById('filmsNavLink');
+  const nouveautesLink = document.getElementById('nouveautesNavLink');
+
+  function openCategoryPanel(titleText) {
+    const titleSpan = document.getElementById('categoryTitle');
+    if (titleSpan) titleSpan.innerText = titleText;
+    renderCategoryResults();
+    categoryPanel.classList.add('open');
+  }
+  function closeCategoryPanel() {
+    categoryPanel.classList.remove('open');
+    categoryResultsContainer.innerHTML = '';
+  }
+  filmsLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    openCategoryPanel(currentLang === 'fr' ? 'Films' : 'Horonantsary');
+  });
+  nouveautesLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    openCategoryPanel(currentLang === 'fr' ? 'Nouveautés' : 'Vaovao');
+  });
+  closeCategoryBtn.addEventListener('click', closeCategoryPanel);
+  document.addEventListener('click', (e) => {
+    if (categoryPanel.classList.contains('open') && !categoryPanel.contains(e.target) && e.target !== filmsLink && e.target !== nouveautesLink && !filmsLink.contains(e.target) && !nouveautesLink.contains(e.target)) {
+      closeCategoryPanel();
+    }
+  });
+
+  function renderCategoryResults() {
+    if (moviesData.length === 0) {
+      categoryResultsContainer.innerHTML = '<div class="no-results">Aucun film disponible</div>';
+      return;
+    }
+    categoryResultsContainer.innerHTML = moviesData.map(movie => `
+      <div class="result-card" data-title="${movie.title}" data-page="${movie.pageId}">
+        <img src="${movie.image}" alt="${movie.title}" loading="lazy">
+        <div class="result-title">${movie.title}</div>
+      </div>
+    `).join('');
+    document.querySelectorAll('#categoryResults .result-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const pageId = card.getAttribute('data-page');
+        const element = document.getElementById(pageId);
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeCategoryPanel();
+      });
+    });
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+  });
+
+  document.querySelectorAll('.ripple-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const ripple = document.createElement('span'); ripple.className = 'ripple';
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      ripple.style.left = (clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (clientY - rect.top - size/2) + 'px';
+      this.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  });
+
+  const paymentModal = document.getElementById('paymentModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  function openPaymentModal() { paymentModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+  function closePaymentModal() { paymentModal.style.display = 'none'; document.body.style.overflow = ''; }
+  window.addEventListener('click', (e) => { if (e.target === paymentModal) closePaymentModal(); });
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closePaymentModal);
+
+  // --- Gestion MVola ---
+  const mvolaModal = document.getElementById('mvolaModal');
+  const closeMvolaBtn = document.getElementById('closeMvolaModalBtn');
+  const backToPaymentBtn = document.getElementById('backToPaymentOptionsBtn');
+  const mvolaConfirmationBox = document.getElementById('mvolaConfirmationBox');
+  const mvolaWaitText = document.getElementById('mvolaWaitText');
+  const mvolaPayBtn = document.getElementById('mvolaPayBtn');
+  let mvolaTimeout = null;
+
+  function openMvolaModal() {
+    closePaymentModal();
+    mvolaModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    mvolaConfirmationBox.style.display = 'none';
+    if (mvolaWaitText) mvolaWaitText.style.display = '';
+    if (mvolaPayBtn) mvolaPayBtn.style.display = 'none';
+    if (mvolaTimeout) { clearTimeout(mvolaTimeout); mvolaTimeout = null; }
+  }
+  function closeMvolaModal() {
+    mvolaModal.style.display = 'none';
+    document.body.style.overflow = '';
+    if (mvolaTimeout) { clearTimeout(mvolaTimeout); mvolaTimeout = null; }
+  }
+  function backToPaymentOptions() {
+    closeMvolaModal();
+    openPaymentModal();
+  }
+  closeMvolaBtn.addEventListener('click', closeMvolaModal);
+  backToPaymentBtn.addEventListener('click', backToPaymentOptions);
+  window.addEventListener('click', (e) => { if (e.target === mvolaModal) closeMvolaModal(); });
+
+  (function() {
+    const rawCode = "#111*1*2*0381104129*3000*2#";
+    const copyBtn = document.getElementById('mvolaCopyBtn');
+    const container = document.getElementById('mvolaCodeContainer');
+
+    async function handleCopy() {
+      try { await navigator.clipboard.writeText(rawCode); } catch {
+        const ta = document.createElement("textarea"); ta.value = rawCode;
+        document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      copyBtn.style.backgroundColor = "#1f6e43";
+      setTimeout(() => copyBtn.style.backgroundColor = "#0088cc", 300);
+
+      if (mvolaTimeout) clearTimeout(mvolaTimeout);
+      mvolaConfirmationBox.style.display = 'block';
+      mvolaWaitText.style.display = '';
+      mvolaPayBtn.style.display = 'none';
+
+      mvolaTimeout = setTimeout(() => {
+        mvolaWaitText.style.display = 'none';
+        mvolaPayBtn.style.display = 'block';
+      }, 40000);
+    }
+
+    copyBtn.addEventListener('click', handleCopy);
+    container.addEventListener('click', (e) => {
+      if (e.target !== copyBtn && !copyBtn.contains(e.target)) handleCopy();
+    });
+  })();
+
+  // --- Gestion Orange Money ---
+  const orangeModal = document.getElementById('orangeModal');
+  const closeOrangeBtn = document.getElementById('closeOrangeModalBtn');
+  const orangeBackBtn = document.getElementById('orangeBackToOptionsBtn');
+  const orangeConfirmationBox = document.getElementById('orangeConfirmationBox');
+  const orangeWaitText = document.getElementById('orangeWaitText');
+  const orangePayBtn = document.getElementById('orangePayBtn');
+  let orangeTimeout = null;
+
+  function openOrangeModal() {
+    closePaymentModal();
+    orangeModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    orangeConfirmationBox.style.display = 'none';
+    if (orangeWaitText) orangeWaitText.style.display = '';
+    if (orangePayBtn) orangePayBtn.style.display = 'none';
+    if (orangeTimeout) { clearTimeout(orangeTimeout); orangeTimeout = null; }
+  }
+  function closeOrangeModal() {
+    orangeModal.style.display = 'none';
+    document.body.style.overflow = '';
+    if (orangeTimeout) { clearTimeout(orangeTimeout); orangeTimeout = null; }
+  }
+  function orangeBackToOptions() {
+    closeOrangeModal();
+    openPaymentModal();
+  }
+  closeOrangeBtn.addEventListener('click', closeOrangeModal);
+  orangeBackBtn.addEventListener('click', orangeBackToOptions);
+  window.addEventListener('click', (e) => { if (e.target === orangeModal) closeOrangeModal(); });
+
+  (function() {
+    const rawCode = "#144*1*1*0377004497*0377004497*3000*2#";
+    const copyBtn = document.getElementById('orangeCopyBtn');
+    const container = document.getElementById('orangeCodeContainer');
+
+    async function handleCopy() {
+      try { await navigator.clipboard.writeText(rawCode); } catch {
+        const ta = document.createElement("textarea"); ta.value = rawCode;
+        document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      copyBtn.style.backgroundColor = "#1f6e43";
+      setTimeout(() => copyBtn.style.backgroundColor = "#f15a24", 300);
+
+      if (orangeTimeout) clearTimeout(orangeTimeout);
+      orangeConfirmationBox.style.display = 'block';
+      orangeWaitText.style.display = '';
+      orangePayBtn.style.display = 'none';
+
+      orangeTimeout = setTimeout(() => {
+        orangeWaitText.style.display = 'none';
+        orangePayBtn.style.display = 'block';
+      }, 40000);
+    }
+
+    copyBtn.addEventListener('click', handleCopy);
+    container.addEventListener('click', (e) => {
+      if (e.target !== copyBtn && !copyBtn.contains(e.target)) handleCopy();
+    });
+  })();
+
+  function handlePaymentSelection(method) {
+    if (method === 'orange') openOrangeModal();
+    else if (method === 'mvola') openMvolaModal();
+  }
+
+  document.querySelectorAll('.pay-option-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => { 
+      e.stopPropagation(); 
+      handlePaymentSelection(btn.getAttribute('data-method'));
+    });
+  });
+
+  const buyGold = document.getElementById('buyNowGold');
+  const payNow = document.getElementById('payNowButton');
+  const otherBtn = document.getElementById('otherPaymentsBtn');
+  function attachPurchaseEvent(btn) {
+    if (!btn) return;
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    newBtn.addEventListener('click', (e) => { e.stopPropagation(); openPaymentModal(); });
+    newBtn.classList.add('ripple-btn');
+    newBtn.addEventListener('click', function(ev) {
+      const existing = this.querySelector('.ripple');
+      if (existing) existing.remove();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      ripple.style.left = (clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (clientY - rect.top - size/2) + 'px';
+      this.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  }
+  attachPurchaseEvent(buyGold);
+  attachPurchaseEvent(payNow);
+  attachPurchaseEvent(otherBtn);
+
+  window.openTrailer = () => window.open('https://www.facebook.com/reel/883981077960642', '_blank');
+
+  setLanguage('fr');
+</script>
+</body>
+</html>
